@@ -9,12 +9,8 @@ function Home() {
   return (
     <div>
         <h1>Home Page</h1>
-      <UserList />
-      <button onClick={()=> dispatch(increment())} >Increment</button>
-      <br />
-      <br />
-
-      <Input />
+        <h2>Name: anil sidhu</h2>
+     
     </div>
   )
 }
