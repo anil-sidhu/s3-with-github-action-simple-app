@@ -17,7 +17,7 @@ jobs:
           chmod 600 ~/.ssh/ec2-key.pem
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
-      - name: Pull latest website code on EC2
+      - name: Pull latest website code on EC2 ok
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
