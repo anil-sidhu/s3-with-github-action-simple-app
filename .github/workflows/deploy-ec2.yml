@@ -19,7 +19,7 @@ jobs:
           ssh-keygen -y -P "" -f ~/.ssh/ec2.pem > /dev/null
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
-      - name: Pull latest website code on EC2
+      - name: Pull latest website code on EC2 ok
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
