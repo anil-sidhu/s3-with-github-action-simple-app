@@ -1,41 +1,29 @@
 name: Deploy Static Website to EC2
-
 on: push
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
 
     steps:
-      - name: Configure SSH connection
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      - name: Deploy to EC2
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-
           printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > ~/.ssh/ec2.pem
           chmod 600 ~/.ssh/ec2.pem
-
-          ssh-keygen -y -P "" -f ~/.ssh/ec2.pem > /dev/null
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
-      - name: Clone or pull website code on EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        run: |
           ssh -i ~/.ssh/ec2.pem "ec2-user@$EC2_HOST" 'bash -se' <<'EOF'
-          APP_DIR="/home/ec2-user/s3-with-github-action-simple-app"
-          REPO_URL="https://github.com/${{ github.repository }}.git"
-
-          if [ -d "$APP_DIR/.git" ]; then
-            echo "Repository exists. Pulling latest code..."
-            cd "$APP_DIR"
+          APP="/home/ec2-user/s3-with-github-action-simple-app"
+          if [ -d "$APP/.git" ]; then
+            cd "$APP"
             git checkout static
             git pull --ff-only origin static
           else
-            echo "Cloning repository..."
-            git clone --branch static "$REPO_URL" "$APP_DIR"
+            git clone -b static "https://github.com/${{ github.repository }}.git" "$APP"
           fi
           EOF
