@@ -22,5 +22,5 @@ jobs:
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
-          ssh -i ~/.ssh/ec2-key.pem "ec2-user@$EC2_HOST" \
+          ssh -i ~/.ssh/ec2.pem "ec2-user@$EC2_HOST" \
             "cd /home/ec2-user/s3-with-github-action-simple-app && git pull --ff-only origin static"
