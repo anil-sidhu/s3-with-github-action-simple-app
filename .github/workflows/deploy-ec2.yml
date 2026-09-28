@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Configure SSH connection ok 
+      - name: Configure SSH connection
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -17,8 +17,9 @@ jobs:
           printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > ~/.ssh/ec2.pem
           chmod 600 ~/.ssh/ec2.pem
           ssh-keygen -y -P "" -f ~/.ssh/ec2.pem > /dev/null
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
-      - name: Pull latest website code on EC2 ok
+      - name: Pull latest website code on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
