@@ -14,7 +14,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf "%s" "$EC2_SSH_KEY" > ~/.ssh/ec2-key.pem
+          printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > ~/.ssh/ec2-key.pem
           chmod 600 ~/.ssh/ec2-key.pem
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
